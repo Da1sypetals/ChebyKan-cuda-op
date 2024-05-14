@@ -10,6 +10,8 @@
 pip install -e .
 ```
 
+> Make sure the version of `nvcc` in `PATH` is compatible with your current PyTorch version (it seems minor version difference is OK).
+
 2. Run
 
 ```bash
