@@ -42,6 +42,13 @@ void cheby_cuda_bwd(at::Tensor gout, at::Tensor x, at::Tensor cheby, at::Tensor 
     int in_feats = x.size(1);
     int degree = cheby.size(2) - 1;
 
+    // std::cout << "batch_size = " << batch_size << std::endl;
+    // std::cout << "in_feats = " << in_feats << std::endl;
+    // std::cout << "degree = " << degree
+    //   << std::endl
+    //   << std::endl
+    //   << std::endl;
+
     cheby_bwd_launcher(gout_ptr, x_ptr, cheby_ptr, grad_x_ptr, batch_size, in_feats, degree);
 }
 

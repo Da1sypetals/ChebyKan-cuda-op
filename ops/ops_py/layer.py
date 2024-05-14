@@ -27,6 +27,8 @@ class ChebyKANLayer(nn.Module):
         # Initialize Chebyshev polynomial tensors
         cheby = ChebyFunction.apply(x, self.degree); 
 
+        # print(type(cheby))
+
         # Compute the Chebyshev interpolation
         y = torch.einsum('bid,iod->bo', cheby, self.cheby_coeffs)  # shape = (batch_size, outdim)
         y = y.view(-1, self.outdim)

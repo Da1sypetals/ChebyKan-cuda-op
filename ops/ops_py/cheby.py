@@ -17,7 +17,7 @@ class ChebyFunction(torch.autograd.Function):
 
         batch_size, in_feats = x.size()
         cheby = x.new_ones((batch_size, in_feats, degree + 1))
-        cheby = cheby_ops.forward(x, cheby, degree)
+        cheby_ops.forward(x, cheby, degree)
 
         ctx.save_for_backward(x, cheby)
 
@@ -26,6 +26,7 @@ class ChebyFunction(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_output): 
+        # print(f'{grad_output.size()=}')
         x, cheby = ctx.saved_tensors
 
         grad_x = x.new_zeros(x.size())

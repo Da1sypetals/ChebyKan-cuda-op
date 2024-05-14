@@ -22,9 +22,8 @@ valloader = DataLoader(valset, batch_size=64, shuffle=False)
 
 # Define model
 # model = KAN([28 * 28, 64, 10])
-from ops import CustomNet
-model = CustomNet()
-
+from ops import ChebyNet
+model = ChebyNet()
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -44,8 +43,10 @@ for epoch in range(10):
             images = images.view(-1, 28 * 28).to(device)
             optimizer.zero_grad()
             output = model(images)
+            # print('forward\n')
             loss = criterion(output, labels.to(device))
             loss.backward()
+            # print('backward\n')
             optimizer.step()
             accuracy = (output.argmax(dim=1) == labels.to(device)).float().mean()
             pbar.set_postfix(loss=loss.item(), accuracy=accuracy.item(), lr=optimizer.param_groups[0]['lr'])

@@ -3,7 +3,7 @@
 #define THREADS_PER_BLOCK 256
 #define WARP_SIZE 32
 #define DIVUP(m, n) ((m + n - 1) / n)
-#define INDEX3D(a, b, c, db, dc) ((a * db * dc + b * dc + c))
+#define INDEX3D(a, b, c, db, dc) (((a) * (db) * (dc) + (b) * (dc) + (c)))
 
 __global__ void cheby_fwd_kernel(const float *x, float *cheby, int batch_size, int in_feats, int degree, int numThreads){
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -11,11 +11,11 @@ __global__ void cheby_fwd_kernel(const float *x, float *cheby, int batch_size, i
         int irow = idx / in_feats;
         int icol = idx % in_feats;
 
-        cheby[INDEX3D(irow, icol, 1, in_feats, degree + 1)] = x[INDEX3D(irow, icol, 1, in_feats, degree + 1)];
+        cheby[INDEX3D(irow, icol, 1, in_feats, degree + 1)] = x[idx];
 
         for(int d = 2; d < degree + 1; d++){
             cheby[INDEX3D(irow, icol, d, in_feats, degree + 1)] = 
-                2 * cheby[INDEX3D(irow, icol, d - 1, in_feats, degree + 1)] * x[INDEX3D(irow, icol, d - 1, in_feats, degree + 1)]
+                2 * cheby[INDEX3D(irow, icol, d - 1, in_feats, degree + 1)] * x[idx]
                 - cheby[INDEX3D(irow, icol, d - 2, in_feats, degree + 1)];
         }
 
