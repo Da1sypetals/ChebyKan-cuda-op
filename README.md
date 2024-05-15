@@ -7,7 +7,7 @@
 
 ## Note
 
-There is a problem with backprop when replacing `bmm` with `einsum`, probably because I created tensors the wrong way. If anyone know how to fix that, please help, a lot of thanks.
+There is a problem with backprop when replacing `bmm` with `einsum` [see here](https://github.com/Da1sypetals/ChebyKan-cuda-op/blob/6f96f2c0084feef4730c21ba63f2fd69e5a35ec6/dfReturnChebyKan/layer.py#L36C12-L36C13), probably because I created tensors the wrong way. If anyone know how to fix that, please help, a lot of thanks.
 
 ## Start
 
