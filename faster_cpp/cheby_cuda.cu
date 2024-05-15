@@ -12,13 +12,13 @@ __global__ void cheby_fwd_kernel(const float *x, float *cheby, int batch_size, i
         int icol = idx % in_feats;
         
         float x_val = x[idx];
-        cheby[INDEX3D(irow, icol, 1, in_feats, degree + 1)] = x_val;
+        cheby[INDEX3D(1, irow, icol, batch_size, in_feats)] = x_val;
         float cheby_val_z = x_val; // index = i - 1
         float cheby_val_zz = 1;    // index = i - 2
 
         for(int d = 2; d < degree + 1; d++){
             float new_cheby_val = 2 * x_val * cheby_val_z - cheby_val_zz;
-            cheby[INDEX3D(irow, icol, d, in_feats, degree + 1)] = new_cheby_val;
+            cheby[INDEX3D(d, irow, icol, batch_size, in_feats)] = new_cheby_val;
             cheby_val_zz = cheby_val_z;
             cheby_val_z = new_cheby_val;
         }
@@ -42,15 +42,15 @@ __global__ void cheby_bwd_kernel(const float* gout, const float *x, const float 
 
         // grad wrt d=0 is equal to zero
         // here is grad wrt d=1
-        float grad_x_val = gout[INDEX3D(irow, icol, 1, in_feats, degree + 1)];
+        float grad_x_val = gout[INDEX3D(1, irow, icol, batch_size, in_feats)];
 
         for(int d = 2; d < degree + 1; d++){
 
             // 2a(i-1)
-            float b = 2 * cheby[INDEX3D(irow, icol, d - 1, in_feats, degree + 1)] 
+            float b = 2 * cheby[INDEX3D(d - 1, irow, icol, batch_size, in_feats)] 
                       + 2 * x_val * b_z - b_zz;
 
-                      grad_x_val += gout[INDEX3D(irow, icol, d, in_feats, degree + 1)] * b;
+            grad_x_val += gout[INDEX3D(d, irow, icol, batch_size, in_feats)] * b;
 
             // finally
             b_zz = b_z;
@@ -58,6 +58,7 @@ __global__ void cheby_bwd_kernel(const float* gout, const float *x, const float 
         }
 
         grad_x[idx] = grad_x_val;
+
 
     }
 }

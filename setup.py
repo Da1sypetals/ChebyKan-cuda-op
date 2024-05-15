@@ -16,6 +16,11 @@ setup(
             ['./cpp/cheby.cpp',
              './cpp/cheby_cuda.cu',]
         ),
+        CUDAExtension(
+            'faster_cheby_ops', # operator name
+            ['./faster_cpp/cheby.cpp',
+             './faster_cpp/cheby_cuda.cu',]
+        ),
     ],
     cmdclass={
         'build_ext': BuildExtension
