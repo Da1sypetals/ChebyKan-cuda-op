@@ -1,23 +1,8 @@
-from .linear import CustomLinear
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 from .layer import ChebyKANLayer
-
-class Net(nn.Module):
-    def __init__(self):
-        super(Net, self).__init__()
-        # MNIST图像大小是28x28
-        self.linear1 = CustomLinear(28*28, 128)
-        self.linear2 = CustomLinear(128, 64)
-        self.linear3 = CustomLinear(64, 10)  # 输出层，10类数字
-
-    def forward(self, x):
-        x = F.relu(self.linear1(x))
-        x = F.relu(self.linear2(x))
-        x = self.linear3(x)
-        return x
 
 class ChebyNet(nn.Module):
     def __init__(self):

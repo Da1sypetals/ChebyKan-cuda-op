@@ -22,7 +22,7 @@ valloader = DataLoader(valset, batch_size=64, shuffle=False)
 
 # Define model
 # model = KAN([28 * 28, 64, 10])
-from ops import ChebyNet
+from cuChebyKan.net import ChebyNet
 model = ChebyNet()
 
 
