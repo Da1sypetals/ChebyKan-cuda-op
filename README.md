@@ -26,7 +26,7 @@ python cheby_test.py
 - Or you can make your own net:
 
 ```python
-from cuChebyKan.layer import ChebyKANLayer
+from fasterCuChebyKan.layer import ChebyKANLayer
 import torch.nn as nn
 
 class ChebyNet(nn.Module):
