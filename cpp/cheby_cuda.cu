@@ -10,15 +10,18 @@ __global__ void cheby_fwd_kernel(const float *x, float *cheby, int batch_size, i
     if (idx < numThreads) {
         int irow = idx / in_feats;
         int icol = idx % in_feats;
-
-        cheby[INDEX3D(irow, icol, 1, in_feats, degree + 1)] = x[idx];
+        
+        float x_val = x[idx];
+        cheby[INDEX3D(irow, icol, 1, in_feats, degree + 1)] = x_val;
+        float cheby_val_z = x_val; // index = i - 1
+        float cheby_val_zz = 1;    // index = i - 2
 
         for(int d = 2; d < degree + 1; d++){
-            cheby[INDEX3D(irow, icol, d, in_feats, degree + 1)] = 
-                2 * cheby[INDEX3D(irow, icol, d - 1, in_feats, degree + 1)] * x[idx]
-                - cheby[INDEX3D(irow, icol, d - 2, in_feats, degree + 1)];
+            float new_cheby_val = 2 * x_val * cheby_val_z - cheby_val_zz;
+            cheby[INDEX3D(irow, icol, d, in_feats, degree + 1)] = new_cheby_val;
+            cheby_val_zz = cheby_val_z;
+            cheby_val_z = new_cheby_val;
         }
-
     }
 }
 
@@ -35,7 +38,7 @@ __global__ void cheby_bwd_kernel(const float* gout, const float *x, const float 
         float b0 = 0, b1 = 1;
         float b_z = b1, b_zz = b0; // b(i-1) and b(i-2)
 
-        float xx = x[idx];
+        float x_val = x[idx];
 
         // grad wrt d=0 is equal to zero
         // here is grad wrt d=1
@@ -45,7 +48,7 @@ __global__ void cheby_bwd_kernel(const float* gout, const float *x, const float 
 
             // 2a(i-1)
             float b = 2 * cheby[INDEX3D(irow, icol, d - 1, in_feats, degree + 1)] 
-                      + 2 * xx * b_z - b_zz;
+                      + 2 * x_val * b_z - b_zz;
 
             grad_x[idx] += gout[INDEX3D(irow, icol, d, in_feats, degree + 1)] * b;
 
@@ -53,8 +56,6 @@ __global__ void cheby_bwd_kernel(const float* gout, const float *x, const float 
             b_zz = b_z;
             b_z = b;
         }
-
-
 
     }
 }

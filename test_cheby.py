@@ -49,7 +49,13 @@ for epoch in range(10):
             # print('backward\n')
             optimizer.step()
             accuracy = (output.argmax(dim=1) == labels.to(device)).float().mean()
-            pbar.set_postfix(loss=loss.item(), accuracy=accuracy.item(), lr=optimizer.param_groups[0]['lr'])
+
+            _loss = loss.item()
+            _acc = accuracy.item()
+            _lr = optimizer.param_groups[0]['lr']
+            pbar.set_postfix(loss=f'{_loss: .3f}', 
+                             accuracy=f'{_acc: .3f}', 
+                             lr=f'{_lr: .6f}')
 
     # Validation
     model.eval()
