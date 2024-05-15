@@ -37,11 +37,11 @@ class ChebyKANLayer(nn.Module):
         y = ein.einsum(cheby, self.cheby_coeffs, 'd b i, d i o -> b o')
         '''
 
-        y = ein.einsum(cheby, self.cheby_coeffs, 'd b i, d i o -> b o')
+        # y = ein.einsum(cheby, self.cheby_coeffs, 'd b i, d i o -> b o')
 
         # Compute the Chebyshev interpolation
-        # y = torch.bmm(cheby, self.cheby_coeffs)  # (d b i), (d i o) -> (d b o)
-        # y = torch.sum(y, dim=0)  # (d b o) -> (b o), sum
+        y = torch.bmm(cheby, self.cheby_coeffs)  # (d b i), (d i o) -> (d b o)
+        y = torch.sum(y, dim=0)  # (d b o) -> (b o), sum
 
         y = y.view(-1, self.outdim)
         return y

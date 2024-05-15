@@ -21,6 +21,11 @@ setup(
             ['./deg_first_cpp/cheby.cpp',
              './deg_first_cpp/cheby_cuda.cu',]
         ),
+        CUDAExtension(
+            'dfr_cheby_ops', # operator name
+            ['./df_return_cpp/cheby.cpp',
+             './df_return_cpp/cheby_cuda.cu',]
+        ),
     ],
     cmdclass={
         'build_ext': BuildExtension

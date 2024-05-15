@@ -23,6 +23,7 @@ valloader = DataLoader(valset, batch_size=64, shuffle=False)
 # Define model
 from degFirstCuChebyKan.net import ChebyNet
 # from cuChebyKan.net import ChebyNet
+from dfReturnChebyKan.net import ChebyNet
 model = ChebyNet()
 
 
