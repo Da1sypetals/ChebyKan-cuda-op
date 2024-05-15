@@ -3,7 +3,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 import math
 
-import faster_cheby_ops
+import deg_first_cheby_ops
 
 
 class ChebyFunction(torch.autograd.Function):
@@ -17,7 +17,7 @@ class ChebyFunction(torch.autograd.Function):
 
         batch_size, in_feats = x.size()
         cheby = x.new_ones((degree + 1, batch_size, in_feats))
-        faster_cheby_ops.forward(x, cheby, degree)
+        deg_first_cheby_ops.forward(x, cheby, degree)
 
         ctx.save_for_backward(x, cheby)
 
@@ -33,7 +33,7 @@ class ChebyFunction(torch.autograd.Function):
 
         # print(f'{grad_output.size()}')
 
-        faster_cheby_ops.backward(grad_output, x, cheby, grad_x)
+        deg_first_cheby_ops.backward(grad_output, x, cheby, grad_x)
 
         return grad_x, None # None for degree
 

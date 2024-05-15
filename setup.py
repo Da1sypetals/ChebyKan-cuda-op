@@ -9,7 +9,7 @@ setup(
     name='cuChebyKan',
     packages=find_packages(),
     version='0.0.0',
-    author='Jing Guo',
+    author='Yuxue Yang',
     ext_modules=[
         CUDAExtension(
             'cheby_ops', # operator name
@@ -17,9 +17,9 @@ setup(
              './cpp/cheby_cuda.cu',]
         ),
         CUDAExtension(
-            'faster_cheby_ops', # operator name
-            ['./faster_cpp/cheby.cpp',
-             './faster_cpp/cheby_cuda.cu',]
+            'deg_first_cheby_ops', # operator name
+            ['./deg_first_cpp/cheby.cpp',
+             './deg_first_cpp/cheby_cuda.cu',]
         ),
     ],
     cmdclass={
